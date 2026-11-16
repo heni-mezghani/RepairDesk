@@ -1,0 +1,132 @@
+<section class="fiche-create">
+
+  <div class="fiche-header">
+    <h1>Nouvelle fiche de réception</h1>
+      <button type="button" class="btn-close" (click)="onBack()">✕ Fermer</button>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert">{{ errorMessage() }}</div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <!-- Client -->
+    <div class="form-box">
+      <h2>Client</h2>
+      <label>Client *
+        <select formControlName="clientId">
+          <option [value]="null" disabled>Sélectionner un client</option>
+          @for (client of clients(); track client.id) {
+            <option [value]="client.id">{{ client.nom }}</option>
+          }
+        </select>
+        @if (form.controls.clientId.touched && form.controls.clientId.invalid) {
+          <small class="field-error">Le client est obligatoire.</small>
+        }
+      </label>
+    </div>
+
+    <!-- Machines -->
+    <div class="form-box">
+      <div class="machines-header">
+        <h2>Machines</h2>
+        <button type="button" class="btn-add" (click)="addMachine()">+ Ajouter une machine</button>
+      </div>
+
+      @for (machine of machines.controls; track $index) {
+        <div class="machine-card" [formGroup]="getMachineGroup($index)">
+          <div class="machine-card-header">
+            <h3>Machine {{ $index + 1 }}</h3>
+            @if (machines.length > 1) {
+              <button type="button" class="btn-remove" (click)="removeMachine($index)">✕</button>
+            }
+          </div>
+
+          <div class="machine-grid">
+
+            <label>Type *
+              <input type="text" formControlName="type" />
+              @if (getMachineGroup($index).get('type')?.touched && getMachineGroup($index).get('type')?.invalid) {
+                <small class="field-error">Obligatoire.</small>
+              }
+            </label>
+
+            <label>Marque *
+              <input type="text" formControlName="marque" />
+              @if (getMachineGroup($index).get('marque')?.touched && getMachineGroup($index).get('marque')?.invalid) {
+                <small class="field-error">Obligatoire.</small>
+              }
+            </label>
+
+            <label>Modèle *
+              <input type="text" formControlName="modele" />
+              @if (getMachineGroup($index).get('modele')?.touched && getMachineGroup($index).get('modele')?.invalid) {
+                <small class="field-error">Obligatoire.</small>
+              }
+            </label>
+
+            <label>N° Série
+              <input type="text" formControlName="numeroSerie" />
+            </label>
+
+            <label>Problème déclaré *
+              <input type="text" formControlName="problemeDeclare" />
+              @if (getMachineGroup($index).get('problemeDeclare')?.touched && getMachineGroup($index).get('problemeDeclare')?.invalid) {
+                <small class="field-error">Obligatoire.</small>
+              }
+            </label>
+
+            <label>Diagnostic *
+              <input type="text" formControlName="diagnostic" />
+              @if (getMachineGroup($index).get('diagnostic')?.touched && getMachineGroup($index).get('diagnostic')?.invalid) {
+                <small class="field-error">Obligatoire.</small>
+              }
+            </label>
+
+            <label>Catégorie *
+              <select formControlName="categoriePanne">
+                <option value="MATERIEL">Matériel</option>
+                <option value="LOGICIEL">Logiciel</option>
+                <option value="MIXTE">Mixte</option>
+              </select>
+            </label>
+
+            <label>Statut *
+              <select formControlName="statut">
+                <option value="RECU">Reçu</option>
+                <option value="EN_COURS">En cours</option>
+                <option value="EN_ATTENTE">En attente</option>
+                <option value="TERMINE">Terminé</option>
+                <option value="RECUPERE">Récupéré</option>
+                <option value="NON_REPARABLE">Non réparable</option>
+              </select>
+            </label>
+
+            <label>Coût estimé *
+              <input type="number" formControlName="coutEstime" />
+              @if (getMachineGroup($index).get('coutEstime')?.touched && getMachineGroup($index).get('coutEstime')?.invalid) {
+                <small class="field-error">Obligatoire.</small>
+              }
+            </label>
+
+            <label>Coût final *
+              <input type="number" formControlName="coutFinal" />
+              @if (getMachineGroup($index).get('coutFinal')?.touched && getMachineGroup($index).get('coutFinal')?.invalid) {
+                <small class="field-error">Obligatoire.</small>
+              }
+            </label>
+
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="loading()">
+      {{ loading() ? 'Enregistrement...' : 'Enregistrer la fiche' }}
+    </button>
+
+  </form>
+
+</section>

@@ -1,0 +1,118 @@
+<section class="client-list">
+
+  <div class="page-header">
+    <h1>Clients</h1>
+    <button type="button" class="btn-new" (click)="openCreatePanel()">+ Ajouter un client</button>
+  </div>
+
+  <input
+    type="text"
+    class="search-box"
+    placeholder="Rechercher par nom, téléphone ou email"
+    (input)="onSearch($event)"
+  />
+
+  @if (loading()) {
+    <p>Chargement...</p>
+  }
+  @if (errorMessage()) {
+    <div class="alert">{{ errorMessage() }}</div>
+  }
+  @if (!loading() && filteredClients().length === 0) {
+    <p>Aucun client trouvé.</p>
+  }
+  @if (!loading() && filteredClients().length > 0) {
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Téléphone</th>
+          <th>Email</th>
+          <th>Adresse</th>
+          <th>Type</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (client of filteredClients(); track client.id) {
+          @if (editingId() === client.id) {
+            <tr [formGroup]="editForm" class="editing">
+              <td><input type="text" formControlName="nom" />
+                @if (editForm.controls.nom.touched && editForm.controls.nom.invalid) {
+                  <small class="field-error">Le nom est obligatoire.</small>
+                }
+              </td>
+
+              <td><input type="text" formControlName="telephone" />
+              @if (editForm.controls.telephone.touched) {
+                @if (editForm.controls.telephone.errors?.['required']) {
+                  <small class="field-error">Le téléphone est obligatoire.</small>
+                }
+                @if (editForm.controls.telephone.errors?.['pattern']) {
+                  <small class="field-error">chiffres uniquement.</small>
+                }
+              }
+              </td>
+              
+              <td><input type="email" formControlName="email" />
+              @if (editForm.controls.email.touched) {
+                @if (editForm.controls.email.errors?.['required']) {
+                  <small class="field-error">L'email est obligatoire.</small>
+                }
+                @if (editForm.controls.email.errors?.['pattern']) {
+                  <small class="field-error">l'email n'est pas valide</small>
+                }
+              }
+              </td>
+
+              <td><input type="text" formControlName="adresse" />
+                @if (editForm.controls.adresse.touched && editForm.controls.adresse.invalid) {
+                  <small class="field-error">L'addresse est obligatoire.</small>
+                }
+              </td>
+
+              <td>
+                <select formControlName="type">
+                  <option value="PARTICULIER">Particulier</option>
+                  <option value="ENTREPRISE">Entreprise</option>
+                </select>
+              </td>
+              <td>
+                <button class="save" (click)="saveEdit(client.id)">Save</button>
+                <button class="cancel" (click)="cancelEdit()">Cancel</button>
+              </td>
+            </tr>
+          } @else {
+            <tr>
+              <td>{{ client.nom }}</td>
+              <td>{{ client.telephone }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.adresse }}</td>
+              <td>{{ client.type }}</td>
+              <td>
+                <a [routerLink]="['/clients', client.id]" class="show">Voir</a>
+                <button class="edit" (click)="editClient(client)">Edit</button>
+                <button class="delete" (click)="deleteClient(client.id)">Delete</button>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  }
+
+  <!-- Panel latéral d'ajout de client -->
+  @if (showCreatePanel()) {
+    <div class="backdrop" (click)="closeCreatePanel()"></div>
+  }
+
+  <aside class="client-panel" [class.open]="showCreatePanel()">
+    @if (showCreatePanel()) {
+      <app-client-create
+        (created)="onClientCreated()"
+        (cancelled)="closeCreatePanel()"
+      ></app-client-create>
+    }
+  </aside>
+
+</section>

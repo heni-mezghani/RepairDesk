@@ -1,0 +1,99 @@
+<header class="navbar">
+
+  <div class="navbar-left">
+    <button
+      type="button"
+      class="menu-toggle"
+      (click)="toggleMenu()">
+      ☰
+    </button>
+
+    <span class="brand">
+      🛠 RepairDesk
+    </span>
+  </div>
+
+  <div class="navbar-right">
+
+    @if (currentUser(); as user) {
+      <div class="user-card">
+        <div class="avatar">
+          {{ user.nom.charAt(0).toUpperCase() }}
+        </div>
+
+        <div class="user-info">
+          <span class="name">{{ user.nom }}</span>
+          <span class="role">{{ user.role }}</span>
+        </div>
+      </div>
+    }
+
+    <button
+      type="button"
+      class="logout"
+      (click)="logout()">
+      🚪 Déconnexion
+    </button>
+
+  </div>
+
+</header>
+
+@if (menuOpen()) {
+  <div class="menu-backdrop" (click)="closeMenu()"></div>
+}
+
+<aside class="nav-panel" [class.open]="menuOpen()">
+
+  <div class="nav-panel-header">
+    <span class="brand">🛠 RepairDesk</span>
+
+    <button
+      type="button"
+      class="nav-panel-close"
+      (click)="closeMenu()">
+      ✕
+    </button>
+  </div>
+
+  <nav class="nav-links">
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active">
+      📊 Tableau de bord
+    </a>
+
+    <a
+      routerLink="/clients"
+      routerLinkActive="active">
+      👥 Clients
+    </a>
+
+    <a
+      routerLink="/machines"
+      routerLinkActive="active">
+      💻 Machines
+    </a>
+
+    <a
+      routerLink="/fiches"
+      routerLinkActive="active">
+      📄 Fiches
+    </a>
+
+    @if (isAdmin()) {
+      <a
+        routerLink="/utilisateurs"
+        routerLinkActive="active">
+        👤 Utilisateurs
+      </a>
+    }
+
+  </nav>
+
+</aside>
+
+<main class="page">
+  <router-outlet />
+</main>

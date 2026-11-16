@@ -1,0 +1,33 @@
+<div class="login-page">
+  <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
+    <h1>RepairDesk</h1>
+    <p class="subtitle">Connectez-vous pour continuer</p>
+
+    <!-- Username -->
+    <label class="field">
+      <span>Nom d'utilisateur</span>
+      <input type="text" formControlName="username" autocomplete="username" />
+      @if (form.controls.username.touched && form.controls.username.invalid) {
+        <small class="field-error">Le nom d'utilisateur est obligatoire.</small>
+      }
+    </label>
+
+    <!-- Password -->
+    <label class="field">
+      <span>Mot de passe</span>
+      <input type="password" formControlName="password" autocomplete="current-password" />
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <small class="field-error">Le mot de passe est obligatoire.</small>
+      }
+    </label>
+
+    <!-- Server-side error (e.g. wrong credentials) -->
+    @if (errorMessage()) {
+      <div class="alert">{{ errorMessage() }}</div>
+    }
+
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Connexion…' : 'Se connecter' }}
+    </button>
+  </form>
+</div>

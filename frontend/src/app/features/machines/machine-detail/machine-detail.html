@@ -1,0 +1,184 @@
+<section class="machine-detail">
+
+  @if (loading()) {
+    <p>Chargement...</p>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert">{{ errorMessage() }}</div>
+  }
+
+  @if (!loading() && machine(); as m) {
+
+    <div class="page-header">
+      <h1>{{ m.marque }} {{ m.modele }}</h1>
+      <a routerLink="/machines">← Retour</a>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <h2>Informations</h2>
+        <p><strong>Type:</strong> {{ m.type }}</p>
+        <p><strong>Marque:</strong> {{ m.marque }}</p>
+        <p><strong>Modèle:</strong> {{ m.modele }}</p>
+        <p><strong>N° Série:</strong> {{ m.numeroSerie }}</p>
+        <p><strong>Catégorie:</strong> {{ m.categoriePanne }}</p>
+        <p><strong>Statut:</strong>
+          <span [class]="'statut-' + m.statut">{{ m.statut }}</span>
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h2>Réparation</h2>
+        <p><strong>Problème déclaré:</strong> {{ m.problemeDeclare }}</p>
+        <p><strong>Diagnostic:</strong> {{ m.diagnostic }}</p>
+        <p><strong>Coût estimé:</strong> {{ m.coutEstime }} DT</p>
+        <p><strong>Coût final:</strong> {{ m.coutFinal }} DT</p>
+      </div>
+    </div>
+
+    <!-- Form Intervention -->
+    <div class="form-box">
+      <h2>Ajouter une intervention</h2>
+
+      @if (formError()) {
+        <div class="alert">{{ formError() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="addIntervention()">
+        <label>Description *
+          <textarea formControlName="description" rows="3"></textarea>
+          @if (form.controls.description.touched && form.controls.description.invalid) {
+            <small class="field-error">La description est obligatoire.</small>
+          }
+        </label>
+
+        <label>Durée (minutes) *
+          <input type="number" formControlName="duree" min="0" />
+          @if (form.controls.duree.touched && form.controls.duree.invalid) {
+            <small class="field-error">La durée est obligatoire.</small>
+          }
+        </label>
+
+        <button type="submit" [disabled]="formLoading()">
+          {{ formLoading() ? 'Enregistrement...' : 'Ajouter' }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Historique Interventions -->
+    <h2>Historique des interventions</h2>
+
+    @if (interventions().length === 0) {
+      <p>Aucune intervention enregistrée.</p>
+    } @else {
+      <div class="timeline">
+        @for (intervention of interventions(); track $index) {
+          <div class="timeline-item">
+            <div class="timeline-date">{{ intervention.date }}</div>
+            <div class="timeline-content">
+              <p><strong>Technicien:</strong> {{ intervention.technicien.nom }}</p>
+              <p><strong>Description:</strong> {{ intervention.description }}</p>
+              <p><strong>Durée:</strong> {{ intervention.duree }} min</p>
+
+              <!-- Pièces -->
+              <div class="pieces-section">
+                <div class="pieces-header">
+                  <strong>Pièces utilisées</strong>
+                  <button class="btn-add-piece"
+                    (click)="openPieceForm(intervention.id)">
+                    + Ajouter une pièce
+                  </button>
+                </div>
+
+                @if (intervention.pieces && intervention.pieces.length > 0) {
+                  <table class="pieces-table">
+                    <thead>
+                      <tr>
+                        <th>Désignation</th>
+                        <th>Référence</th>
+                        <th>Prix unitaire</th>
+                        <th>Quantité</th>
+                        <th>Total</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (piece of intervention.pieces; track piece.id) {
+                        <tr>
+                          <td>{{ piece.designation }}</td>
+                          <td>{{ piece.reference }}</td>
+                          <td>{{ piece.prixUnitaire }} DT</td>
+                          <td>{{ piece.quantite }}</td>
+                          <td>{{ piece.prixUnitaire * piece.quantite }} DT</td>
+                          <td>
+                            <button class="btn-delete-piece"
+                              (click)="deletePiece(intervention.id, piece.id)">✕</button>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                } @else {
+                  <p class="no-pieces">Aucune pièce.</p>
+                }
+
+                <!-- Form ajout pièce -->
+                @if (addingPieceForId() === intervention.id) {
+                  <div class="piece-form" [formGroup]="pieceForm">
+
+                    <div>
+                      <input type="text" formControlName="designation"
+                      placeholder="Désignation *" />
+
+                      @if (pieceForm.controls.designation.touched && pieceForm.controls.designation.invalid) {
+                        <small class="field-error">Le designation est obligatoire.</small>
+                      }
+                    </div>
+                    
+                    <div>
+                      <input type="text" formControlName="reference"
+                      placeholder="Référence *" />
+                      @if (pieceForm.controls.reference.touched && pieceForm.controls.reference.invalid) {
+                        <small class="field-error">Le reference est obligatoire.</small>
+                      }
+                    </div>
+                    
+                    <div>
+                      <input type="number" formControlName="prixUnitaire"
+                      placeholder="Prix unitaire" min="0" />
+                      @if (pieceForm.controls.prixUnitaire.touched && pieceForm.controls.prixUnitaire.invalid) {
+                        <small class="field-error">Le prix Unitaire est obligatoire.</small>
+                      }
+                    </div>
+
+                    <div>
+                      <input type="number" formControlName="quantite"
+                      placeholder="Quantité" min="1" />
+                       @if (pieceForm.controls.quantite.touched && pieceForm.controls.quantite.invalid) {
+                          <small class="field-error">Le quantite est obligatoire.</small>
+                        }
+                    </div>
+
+                    <div class="piece-form-actions">
+                      <button class="btn-save-piece"
+                        (click)="addPiece(intervention.id)"
+                        [disabled]="pieceFormLoading()">
+                        {{ pieceFormLoading() ? '...' : 'Enregistrer' }}
+                      </button>
+                      <button class="btn-cancel-piece"
+                        (click)="cancelPieceForm()">Annuler</button>
+                    </div>
+                  </div>
+                }
+
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+  }
+
+</section>

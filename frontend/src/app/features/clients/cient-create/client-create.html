@@ -1,0 +1,65 @@
+<section class="client-create">
+
+  <div class="page-header">
+    <h1>Ajouter un client</h1>
+    <button type="button" class="btn-close" (click)="onBack()">✕ Fermer</button>
+  </div>
+
+  <form class="form-box" [formGroup]="form" (ngSubmit)="submit()">
+
+    @if (formError()) {
+      <div class="alert">{{ formError() }}</div>
+    }
+
+    <label>Nom *
+      <input type="text" formControlName="nom" />
+      @if (form.controls.nom.touched && form.controls.nom.invalid) {
+        <small class="field-error">Le nom est obligatoire.</small>
+      }
+    </label>
+
+    <label>Téléphone *
+      <input type="text" formControlName="telephone" />
+      @if (form.controls.telephone.touched) {
+        @if (form.controls.telephone.errors?.['required']) {
+          <small class="field-error">Le téléphone est obligatoire.</small>
+        }
+        @if (form.controls.telephone.errors?.['pattern']) {
+          <small class="field-error">Le téléphone doit contenir uniquement des chiffres.</small>
+        }
+      }
+    </label>
+
+    <label>Email *
+      <input type="email" formControlName="email" />
+      @if (form.controls.email.touched) {
+        @if (form.controls.email.errors?.['required']) {
+          <small class="field-error">L'email est obligatoire.</small>
+        }
+        @if (form.controls.email.errors?.['pattern']) {
+          <small class="field-error">l'email n'est pas valide</small>
+        }
+      }
+    </label>
+
+    <label>Adresse *
+      <input type="text" formControlName="adresse" />
+      @if (form.controls.adresse.touched && form.controls.adresse.invalid) {
+        <small class="field-error">L'adresse est obligatoire.</small>
+      }
+    </label>
+
+    <label>Type *
+      <select formControlName="type">
+        <option value="PARTICULIER">Particulier</option>
+        <option value="ENTREPRISE">Entreprise</option>
+      </select>
+    </label>
+
+    <button type="submit" [disabled]="formLoading()">
+      {{ formLoading() ? 'Enregistrement...' : 'Enregistrer' }}
+    </button>
+
+  </form>
+
+</section>

@@ -1,0 +1,157 @@
+.fiche-detail {
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.fiche-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.fiche-header h1 {
+  color: #2c3e50;
+  font-size: 26px;
+}
+
+.fiche-header a {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.alert {
+  background-color: #ffdddd;
+  color: #a94442;
+  padding: 10px 15px;
+  border-left: 5px solid #f44336;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.info-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.info-card h2 {
+  color: #2c3e50;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.info-card p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+h2 {
+  color: #2c3e50;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+thead {
+  background-color: #3498db;
+  color: white;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+
+.delete-fiche {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ff4d4d, #e60000);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delete-fiche:hover {
+  transform: scale(1.02);
+}
+
+.actions-bar {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.print-btn {
+  padding: 12px 24px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.print-btn:hover {
+  transform: scale(1.02);
+}
+
+.print-footer {
+  margin-top: 30px;
+  font-size: 14px;
+  color: #555;
+}
+
+@media print {
+  .fiche-header a,
+  .actions-bar {
+    display: none !important;
+  }
+
+  .fiche-detail {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .info-card,
+  table {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

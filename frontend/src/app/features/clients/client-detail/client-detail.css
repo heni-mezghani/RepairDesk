@@ -1,0 +1,114 @@
+.client-detail {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.client-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.client-header h1 {
+  color: #2c3e50;
+  font-size: 26px;
+}
+
+.client-header a {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.alert {
+  background-color: #ffdddd;
+  color: #a94442;
+  padding: 10px 15px;
+  border-left: 5px solid #f44336;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+
+.client-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+
+.client-card p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+h2 {
+  color: #2c3e50;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.fiche-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.fiche-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.fiche-card-header h3 {
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.fiche-card-header a {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.fiche-card p {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.fiche-card h4 {
+  margin-top: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+.fiche-card table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.fiche-card th, .fiche-card td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.fiche-card thead {
+  background-color: #f0f7ff;
+}
+
+.empty {
+  font-size: 13px;
+  color: #999;
+}

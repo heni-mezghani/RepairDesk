@@ -1,0 +1,83 @@
+<section class="fiche-detail">
+
+  @if (loading()) {
+    <p>Chargement...</p>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert">{{ errorMessage() }}</div>
+  }
+
+  @if (!loading() && fiche(); as f) {
+
+    <div class="fiche-header">
+      <h1>Fiche {{ f.numero }}</h1>
+      <a routerLink="/fiches">← Retour</a>
+    </div>
+
+    <div class="info-grid">
+
+      <div class="info-card">
+        <h2>Informations générales</h2>
+        <p><strong>Numéro:</strong> {{ f.numero }}</p>
+        <p><strong>Date:</strong> {{ f.dateReception }}</p>
+        <p><strong>Technicien:</strong> {{ f.technicienRecepteur.nom }}</p>
+      </div>
+
+      <div class="info-card">
+        <h2>Client</h2>
+        <p><strong>Nom:</strong> {{ f.client.nom }}</p>
+        <p><strong>Téléphone:</strong> {{ f.client.telephone }}</p>
+        <p><strong>Email:</strong> {{ f.client.email }}</p>
+        <p><strong>Adresse:</strong> {{ f.client.adresse }}</p>
+      </div>
+
+    </div>
+
+    <h2>Machines</h2>
+
+    @if (f.machines.length === 0) {
+      <p>Aucune machine dans cette fiche.</p>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Marque</th>
+            <th>Modèle</th>
+            <th>N° Série</th>
+            <th>Problème</th>
+            <th>Diagnostic</th>
+            <th>Catégorie</th>
+            <th>Statut</th>
+            <th>Coût Estimé</th>
+            <th>Coût Final</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (machine of f.machines; track $index) {
+            <tr>
+              <td>{{ machine.type }}</td>
+              <td>{{ machine.marque }}</td>
+              <td>{{ machine.modele }}</td>
+              <td>{{ machine.numeroSerie }}</td>
+              <td>{{ machine.problemeDeclare }}</td>
+              <td>{{ machine.diagnostic }}</td>
+              <td>{{ machine.categoriePanne }}</td>
+              <td>{{ machine.statut }}</td>
+              <td>{{ machine.coutEstime }}</td>
+              <td>{{ machine.coutFinal }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+
+    <div class="actions-bar">
+        <button class="print-btn" (click)="printReceipt()">🖨 Imprimer le reçu</button>
+        <button class="delete-fiche" (click)="deleteFiche()">Supprimer la fiche et toutes ses machines</button>
+    </div>
+
+  }
+
+</section>

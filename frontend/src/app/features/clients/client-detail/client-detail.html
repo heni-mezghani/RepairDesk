@@ -1,0 +1,70 @@
+<section class="client-detail">
+
+  @if (loading()) {
+    <p>Chargement...</p>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert">{{ errorMessage() }}</div>
+  }
+
+  @if (!loading() && client(); as c) {
+
+    <div class="client-header">
+      <h1>{{ c.nom }}</h1>
+      <a routerLink="/clients">← Retour</a>
+    </div>
+
+    <div class="client-card">
+      <p><strong>Téléphone:</strong> {{ c.telephone }}</p>
+      <p><strong>Email:</strong> {{ c.email }}</p>
+      <p><strong>Adresse:</strong> {{ c.adresse }}</p>
+      <p><strong>Type:</strong> {{ c.type }}</p>
+    </div>
+
+    <h2>Fiches de réception</h2>
+
+    @if (fiches().length === 0) {
+      <p>Aucune fiche pour ce client.</p>
+    } @else {
+      @for (fiche of fiches(); track fiche.id) {
+        <div class="fiche-card">
+          <div class="fiche-card-header">
+            <h3>Fiche {{ fiche.numero }}</h3>
+            <a [routerLink]="['/fiches', fiche.id]">Voir détails →</a>
+          </div>
+          <p><strong>Date:</strong> {{ fiche.dateReception }}</p>
+          <p><strong>Technicien:</strong> {{ fiche.technicien }}</p>
+
+          <h4>Machines</h4>
+          @if (fiche.machines.length === 0) {
+            <p class="empty">Aucune machine.</p>
+          } @else {
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Marque</th>
+                  <th>Modèle</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (machine of fiche.machines; track $index) {
+                  <tr>
+                    <td>{{ machine.type }}</td>
+                    <td>{{ machine.marque }}</td>
+                    <td>{{ machine.modele }}</td>
+                    <td>{{ machine.statut }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          }
+        </div>
+      }
+    }
+
+  }
+
+</section>

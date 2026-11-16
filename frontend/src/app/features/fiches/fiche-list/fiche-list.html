@@ -1,0 +1,70 @@
+<section class="fiche-list">
+
+  <div class="fiche-header">
+    <h1>Fiches de réception</h1>
+    <button type="button" class="btn-new" (click)="openCreatePanel()">+ Nouvelle fiche</button>
+  </div>
+
+  <input
+    type="text"
+    class="search-box"
+    placeholder="Rechercher par numéro, client ou date"
+    (input)="onSearch($event)"
+  />
+
+  @if (loading()) {
+    <p>Chargement...</p>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert">{{ errorMessage() }}</div>
+  }
+
+  @if (!loading() && filteredFiches().length === 0) {
+    <p>Aucune fiche trouvée.</p>
+  }
+
+  @if (!loading() && filteredFiches().length > 0) {
+    <table>
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Date</th>
+          <th>Client</th>
+          <th>Technicien</th>
+          <th>Machines</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (fiche of filteredFiches(); track fiche.id) {
+          <tr>
+            <td>{{ fiche.numero }}</td>
+            <td>{{ fiche.dateReception }}</td>
+            <td>{{ fiche.client }}</td>
+            <td>{{ fiche.technicien }}</td>
+            <td>{{ fiche.nombreMachines }}</td>
+            <td>
+              <a [routerLink]="['/fiches', fiche.id]" class="show">Voir</a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <!-- Panel latéral de création de fiche -->
+  @if (showCreatePanel()) {
+    <div class="backdrop" (click)="closeCreatePanel()"></div>
+  }
+
+  <aside class="fiche-panel" [class.open]="showCreatePanel()">
+    @if (showCreatePanel()) {
+      <app-fiche-create
+        (created)="onFicheCreated()"
+        (cancelled)="closeCreatePanel()"
+      ></app-fiche-create>
+    }
+  </aside>
+
+</section>

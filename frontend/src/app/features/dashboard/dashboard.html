@@ -1,0 +1,118 @@
+<section class="dashboard">
+
+  @if (currentUser(); as user) {
+    <div class="welcome">
+      <h1>Bienvenue, <strong>{{ user.nom }}</strong> 👋</h1>
+      <p>{{ user.role }}</p>
+    </div>
+  }
+
+  @if (loading()) {
+    <p>Chargement...</p>
+  }
+
+  <!-- Machines par statut -->
+  <h2>Machines par statut</h2>
+  <div class="stats-grid">
+    @for (statut of objectKeys(machinesParStatut()); track statut) {
+      <div class="stat-card" [style.border-color]="getStatutColor(statut)">
+        <div class="stat-number" [style.color]="getStatutColor(statut)">
+          {{ machinesParStatut()[statut] }}
+        </div>
+        <div class="stat-label">{{ statut }}</div>
+      </div>
+    }
+    @if (objectKeys(machinesParStatut()).length === 0) {
+      <p class="empty">Aucune machine.</p>
+    }
+  </div>
+
+  <!-- Pannes par catégorie -->
+  <h2>Répartition des pannes</h2>
+  <div class="stats-grid">
+    @for (cat of objectKeys(pannesParCategorie()); track cat) {
+      <div class="stat-card">
+        <div class="stat-number">{{ pannesParCategorie()[cat] }}</div>
+        <div class="stat-label">{{ cat }}</div>
+      </div>
+    }
+    @if (objectKeys(pannesParCategorie()).length === 0) {
+      <p class="empty">Aucune donnée.</p>
+    }
+  </div>
+
+  <!-- Fiches du jour -->
+  <h2>Fiches du jour</h2>
+  @if (fichesDuJour().length === 0) {
+    <p class="empty">Aucune fiche aujourd'hui.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Client</th>
+          <th>Technicien</th>
+          <th>Machines</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (fiche of fichesDuJour(); track fiche.id) {
+          <tr>
+            <td>{{ fiche.numero }}</td>
+            <td>{{ fiche.client }}</td>
+            <td>{{ fiche.technicien }}</td>
+            <td>{{ fiche.nombreMachines }}</td>
+            <td><a [routerLink]="['/fiches', fiche.id]" class="show">Voir</a></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <!-- Machines terminées non récupérées -->
+  <h2>Machines terminées — en attente de récupération</h2>
+  @if (machinesTerminees().length === 0) {
+    <p class="empty">Aucune machine en attente.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Marque</th>
+          <th>Modèle</th>
+          <th>N° Série</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (machine of machinesTerminees(); track machine.id) {
+          <tr>
+            <td>{{ machine.type }}</td>
+            <td>{{ machine.marque }}</td>
+            <td>{{ machine.modele }}</td>
+            <td>{{ machine.numeroSerie }}</td>
+            <td><a [routerLink]="['/machines', machine.id]" class="show">Voir</a></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <!-- Interventions par technicien (admin seulement) -->
+  @if (isAdmin()) {
+    <h2>Interventions par technicien</h2>
+    <div class="stats-grid">
+      @for (tech of objectKeys(interventionsParTechnicien()); track tech) {
+        <div class="stat-card">
+          <div class="stat-number">{{ interventionsParTechnicien()[tech] }}</div>
+          <div class="stat-label">{{ tech }}</div>
+        </div>
+      }
+      @if (objectKeys(interventionsParTechnicien()).length === 0) {
+        <p class="empty">Aucune intervention.</p>
+      }
+    </div>
+  }
+
+</section>

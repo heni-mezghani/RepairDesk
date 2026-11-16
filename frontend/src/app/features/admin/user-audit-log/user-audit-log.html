@@ -1,0 +1,65 @@
+<section class="audit-log">
+
+  <div class="page-header">
+    <div>
+      <h1>Historique de {{ username()}}</h1>
+      <a routerLink="/utilisateurs" class="back-link">← Retour aux utilisateurs</a>
+    </div>
+  </div>
+
+  <div class="filters">
+    <label>
+      Du
+      <input type="date" [value]="dateFrom()" (change)="onDateFromChange($event)" />
+    </label>
+
+    <label>
+      Au
+      <input type="date" [value]="dateTo()" (change)="onDateToChange($event)" />
+    </label>
+
+    @if (dateFrom() || dateTo()) {
+      <button type="button" class="btn-clear" (click)="clearFilters()">Réinitialiser</button>
+    }
+  </div>
+
+  @if (loading()) {
+    <p>Chargement...</p>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert">{{ errorMessage() }}</div>
+  }
+
+  @if (!loading() && filteredLogs().length === 0) {
+    <p>Aucune activité trouvée pour cette période.</p>
+  }
+
+  @if (!loading() && filteredLogs().length > 0) {
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Action</th>
+          <th>Entité</th>
+          <th>Détails</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (log of filteredLogs(); track log.id) {
+          <tr>
+            <td>{{ log.date | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+              <span [class]="'action-badge action-' + log.action.toLowerCase()">
+                {{ log.action }}
+              </span>
+            </td>
+            <td>{{ log.entite }}</td>
+            <td>{{ log.details }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+</section>
